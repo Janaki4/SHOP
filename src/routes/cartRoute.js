@@ -2,40 +2,38 @@ const express = require("express");
 const app = express();
 const cartRouter = new express.Router();
 const prodMod = require("../modal/product");
-app.use(express.json());
 const cartModel = require("../modal/cart");
+app.use(express.json());
 
-// cartRouter.get("/cart/:id", async (req, res) => {
-//   try {
-//     const prod = await prodMod.findById(req.params.id);
-//     if (!prod) {
-//       return res.status(401).send("No product found on this id");
-//     }
-//     const { productName, description } = prod;
+cartRouter.get("/cart/:id", async (req, res) => {
+  try {
+    const prod = await prodMod.findById(req.params.id);
+    if (!prod) {
+      return res.status(401).send("No product found on this id");
+    }
+    const { productName, description } = prod;
 
-//     const data = await cartModel.findOne({ productName });
-//     if (!data) {
-//       const newProduct = await new cartModel({ productName, description });
-//       await newProduct.save();
-//       return res.status(201).send(newProduct);
-//     }
-//     const alreadyExistingProd = await cartModel.findOneAndUpdate(
-//       {
-//         productName: data.productName,
-//         description: data.description,
-//       },
-//       {
-//         quantity: data.quantity + 1,
-//       },
-//       { new: true }
-//     );
-//     res.status(402).send(alreadyExistingProd);
-//   } catch (error) {
-//     res.status(400).send(error);
-//   }
-// });
-
-// const func = async (req, res) => {};
+    const data = await cartModel.findOne({ productName: productName });
+    if (!data) {
+      const newProduct = await new cartModel({ productName, description });
+      await newProduct.save();
+      return res.status(201).send(newProduct);
+    }
+    const alreadyExistingProd = await cartModel.findOneAndUpdate(
+      {
+        productName: data.productName,
+        description: data.description,
+      },
+      {
+        quantity: data.quantity + 1,
+      },
+      { new: true }
+    );
+    res.status(200).send(alreadyExistingProd);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
 
 cartRouter.post("/cart", async (req, res) => {
   try {
