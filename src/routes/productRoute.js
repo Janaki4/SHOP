@@ -5,6 +5,7 @@ const prodMod = require("../modal/product");
 app.use(express.json());
 const cartModel = require("../modal/cart");
 
+//posting new product in the product model
 router.post("/product", async (req, res) => {
   try {
     const prod = new prodMod(req.body);
@@ -15,6 +16,7 @@ router.post("/product", async (req, res) => {
   }
 });
 
+//retrieving all the products
 router.get("/product", async (req, res) => {
   try {
     const prodList = await prodMod.find();

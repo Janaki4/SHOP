@@ -5,6 +5,8 @@ const prodMod = require("../modal/product");
 const cartModel = require("../modal/cart");
 app.use(express.json());
 
+//taking product from product model by its ID and checking and adding it to the cart
+//If the product is already in the cart , Increasing the quantity by 1
 cartRouter.get("/cart/:id", async (req, res) => {
   try {
     const prod = await prodMod.findById(req.params.id);
@@ -35,6 +37,8 @@ cartRouter.get("/cart/:id", async (req, res) => {
   }
 });
 
+//Posting a new product into the cart
+//If the product is already in the cart , Increasing the quantity by 1
 cartRouter.post("/cart", async (req, res) => {
   try {
     const data = await cartModel.findOne({
@@ -61,6 +65,7 @@ cartRouter.post("/cart", async (req, res) => {
   }
 });
 
+//getting all  the products in the cart
 cartRouter.get("/cart", async (req, res) => {
   try {
     const cartItems = await cartModel.find({});
